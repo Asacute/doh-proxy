@@ -1,0 +1,25 @@
+name: Build Executable
+
+on:
+  workflow_dispatch: # Allows you to run this manually
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 'stable'
+
+      - name: Build for Windows
+        run: env GOOS=windows GOARCH=amd64 go build -v -o doh-server.exe
+
+      - name: Upload Windows Binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-doh-server
+          path: doh-server.exe
